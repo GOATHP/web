@@ -32,4 +32,7 @@ y *= x;
 console.log(y);
 
 y /= x;
-console.log(y)
+console.log(y);
+
+y %= x;
+console.log(y);
