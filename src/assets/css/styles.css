@@ -1,0 +1,34 @@
+@charset "UTF-8";
+/* 부트스트랩 적용 */
+/* styles.css */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  color: black;
+  /* 글씨색을 검정으로 변경 */
+  font-family: "HANA", sans-serif;
+  /* 글씨체를 HANA로 변경 */
+  background-image: url("https://www.hanafn.com:8002/assets/img/ko/info/img-hana-symbol.png");
+  font-weight: bold;
+  background-repeat: no-repeat;
+  /* 이미지 반복 없음 */
+  background-size: contain;
+  /* 이미지가 요소에 맞게 크기 조정 */
+  padding-left: 45px; }
+
+.nav-link {
+  color: black !important;
+  /* 글씨색을 검정으로 변경 */
+  font-family: "HANA", sans-serif;
+  /* 글씨체를 HANA로 변경 */ }
+
+
+  .nav-item .nav-link.active,
+  .nav-item .nav-link:active {
+  background-color: #009490 !important;
+  color: white !important;
+}
+
+.test{
+  margin-top:15px !important;
+}

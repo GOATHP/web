@@ -1,0 +1,14 @@
+{
+  "name": "styles",
+  "version": "1.0.0",
+  "description": "My styles",
+  "main": "index.js",
+  "scripts": {
+    "test": "hi"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-sass": "^9.0.0"
+  }
+}

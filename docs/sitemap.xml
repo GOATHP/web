@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:4000/about.html</loc>
+</url>
+<url>
+<loc>http://localhost:4000/company.html</loc>
+</url>
+<url>
+<loc>http://localhost:4000/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/assets/css/node_modules/node-gyp/node_modules/unique-filename/coverage/</loc>
+<lastmod>2023-05-23T19:57:44+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/assets/web.html</loc>
+<lastmod>2023-05-19T15:33:59+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/footer.html</loc>
+<lastmod>2023-05-22T15:39:42+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/header.html</loc>
+<lastmod>2023-05-22T15:39:43+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/test.html</loc>
+<lastmod>2023-05-23T13:20:07+09:00</lastmod>
+</url>
+</urlset>
