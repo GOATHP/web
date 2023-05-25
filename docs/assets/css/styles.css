@@ -1,12 +1,49 @@
 @charset "UTF-8";
+
 /* 부트스트랩 적용 */
 /* styles.css */
+@font-face {
+  font-family: 'Hana';
+  font-weight: 300;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaLight.eot');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaLight.eot?#iefix') format('embedded-opentype'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaLight.woff2') format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaLight.woff') format('woff'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaLight.ttf') format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hana';
+  font-weight: 500;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaMedium.eot');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaMedium.eot?#iefix') format('embedded-opentype'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaMedium.woff2') format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaMedium.woff') format('woff'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaMedium.ttf') format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hana';
+  font-weight: 700;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaBold.eot');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaBold.eot?#iefix') format('embedded-opentype'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaBold.woff2') format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaBold.woff') format('woff'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/hana/HanaBold.ttf') format("truetype");
+  font-display: swap;
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
   color: black;
   /* 글씨색을 검정으로 변경 */
-  font-family: "HANA", sans-serif;
+  font-family: "Hana", sans-serif;
   /* 글씨체를 HANA로 변경 */
   background-image: url("https://www.hanafn.com:8002/assets/img/ko/info/img-hana-symbol.png");
   font-weight: bold;
@@ -14,21 +51,71 @@
   /* 이미지 반복 없음 */
   background-size: contain;
   /* 이미지가 요소에 맞게 크기 조정 */
-  padding-left: 45px; }
+  padding-left: 45px;
+}
 
 .nav-link {
   color: black !important;
   /* 글씨색을 검정으로 변경 */
   font-family: "HANA", sans-serif;
-  /* 글씨체를 HANA로 변경 */ }
+  /* 글씨체를 HANA로 변경 */
+}
 
 
-  .nav-item .nav-link.active,
-  .nav-item .nav-link:active {
+.nav-item .nav-link.active,
+.nav-item .nav-link:active {
   background-color: #009490 !important;
   color: white !important;
 }
 
-.test{
-  margin-top:15px !important;
+.test {
+  margin-top: 15px !important;
+}
+
+.custom-btn2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: white !important;
+  font-family: "Hana", sans-serif !important;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  padding: 0;
+  gap:10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.custom-btn2 button {
+  max-width:90%;
+  font-size: 1vw;
+  height: auto;
+  border: none !important;
+  background-color: #009490 !important;
+}
+
+.custom-btn2 img {
+  width: 70%;
+  height: auto;
+  object-fit: cover;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+
+.container {
+  max-width: 1200px;
+  width: 80%;
+  
+  padding : 0 25px;
+
+}
+
+.btn-resize {
+  transition: all 0.3s;
+}
+
+.btn-resize:hover {
+  font-size: 95%;
 }

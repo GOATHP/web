@@ -5,13 +5,8 @@
 //     (userNumber % 2) ? alert(`${userNumber}: 홀수`) : alert(`${userNumber}:짝수`)
 // }
 
-let name="hello";
 
-switch(name) {
-    case 'hello':
-        console.log("hello world");
-        break;
-    case 'park':
-        console.log("박태현 화이팅");
-        break;
-}
+
+
+let name = 'park';
+obj[name]();
