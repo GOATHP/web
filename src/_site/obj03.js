@@ -1,18 +1,10 @@
-const kim = {
-    firstname: "John",
-    lastname: "kim",
-    age: 35,
-    address: "seoul"
-    };
+const pet = {
+    name: '구름',
+    eat: function (food) {
+    }
+    console.log(this.name + '이가' + food + '를 맛있게 먹고 있어요')
+};
 
+console.log(pet);
 
-console.log(kim)
-
-
-kim.firstname = "John",
-kim.lastname = "kim",
-kim.age = 19,
-kim.address = "seoul"
-
-
-console.log(kim)
+//메소드를 호출합니다.

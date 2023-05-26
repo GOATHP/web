@@ -73,8 +73,50 @@
 }
 
 .custom-btn2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   color: white !important;
   font-family: "Hana", sans-serif !important;
-  background-color: #009490 !important;
-  border: none !important;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  padding: 0;
+  gap:10px;
+  text-align: center;
+  overflow: hidden;
 }
+
+.custom-btn2 button {
+  max-width:90%;
+  font-size: 1vw;
+  height: auto;
+  border: none !important;
+  background-color: #009490 !important;
+}
+
+.custom-btn2 img {
+  width: 70%;
+  height: auto;
+  object-fit: cover;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+
+.container {
+  max-width: 1200px;
+  width: 80%;
+  
+  padding : 0 25px;
+
+}
+
+.btn-resize {
+  transition: all 0.3s;
+}
+
+.btn-resize:hover {
+  font-size: 95%;
+}
+
