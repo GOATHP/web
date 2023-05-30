@@ -10,41 +10,241 @@
 </head>
 
 <body>
-    <div class="container right-panel-active">
-        <!-- Sign Up -->
-        <div class="container__form container--signup">
-            <form action="#" class="form" id="form1">
-                <h2 class="form__title">Sign Up</h2>
-                <input type="text" placeholder="User" class="input" />
-                <input type="email" placeholder="Email" class="input" />
-                <input type="password" placeholder="Password" class="input" />
-                <button class="btn">Sign Up</button>
-            </form>
-        </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Elements
+            const el = {
+                signUpHome: document.getElementById('sign-up'),
+                signInHome: document.getElementById('sign-in'),
+                btnHome: document.querySelector('.btn-back'),
+                pageMain: document.querySelector('.main'),
+                pageHome: document.querySelector('.home'),
+                pageSignUp: document.querySelector('.sign-up'),
+                formArea: document.querySelector('.form-area'),
+                sideSignLeft: document.querySelector('.signup-left'),
+                sideSignRight: document.querySelector('.signup-right'),
+                formSignUp: document.querySelector('.form-area-signup'),
+                formSignIn: document.querySelector('.form-area-signin'),
+                linkUp: document.querySelector('.link-up'),
+                linkIn: document.querySelector('.link-in'),
+                btnSignUp: document.querySelector('.btn-up'),
+                btnSignIn: document.querySelector('.btn-in'),
+                labels: document.getElementsByTagName('label'),
+                inputs: document.getElementsByTagName('input'),
 
-        <!-- Sign In -->
-        <div class="container__form container--signin">
-            <form action="#" class="form" id="form2">
-                <h2 class="form__title">Sign In</h2>
-                <input type="email" placeholder="Email" class="input" />
-                <input type="password" placeholder="Password" class="input" />
-                <a href="#" class="link">Forgot your password?</a>
-                <button class="btn">Sign In</button>
-            </form>
-        </div>
+            };
+            // ADD Events
+            // Show the page Sign Up
+            el.signUpHome.addEventListener('click', function (e) {
+                showSign(e, 'signup');
+            });
+            el.linkUp.addEventListener('click', function (e) {
+                showSign(e, 'signup');
+            });
+            // Show the page sign in
+            el.signInHome.addEventListener('click', function (e) {
+                showSign(e, 'signin');
+            });
+            el.linkIn.addEventListener('click', function (e) {
+                showSign(e, 'signin');
+            });
+            el.btnSignUp.addEventListener('click', function (e) {
+                showSign(e, 'signin');
+            });
+            // Show the page Home
+            el.btnHome.addEventListener('click', showHome);
+            // Functions Events
+            // function to show screen Home
+            function showHome(event) {
+                setTimeout(function () {
+                    el.sideSignLeft.style.padding = '0';
+                    el.sideSignLeft.style.opacity = '0';
+                    el.sideSignRight.style.opacity = '0';
+                    el.sideSignRight.style.backgroundPositionX = '235%';
+                    el.formArea.style.opacity = '0';
+                    setTimeout(function () {
+                        el.pageSignUp.style.opacity = '0';
+                        el.pageSignUp.style.display = 'none';
+                        for (input of el.inputs) {
+                            input.value = '';
+                        }
+                    }, 900);
+                }, 100);
+                setTimeout(function () {
+                    el.pageHome.style.display = 'flex';
+                }, 1100);
+                setTimeout(function () {
+                    el.pageHome.style.opacity = '1';
+                }, 1200);
+            }
+            // function to show screen Sign up/Sign in
+            function showSign(event, sign) {
+                if (sign === 'signup') {
+                    el.formSignUp.style.display = 'flex';
+                    el.formSignIn.style.opacity = '0';
+                    setTimeout(function () {
+                        el.formSignUp.style.opacity = '1';
+                    }, 100);
+                    el.formSignIn.style.display = 'none';
+                } else {
+                    el.formSignIn.style.display = 'flex';
+                    el.formSignUp.style.opacity = '0';
+                    setTimeout(function () {
+                        el.formSignIn.style.opacity = '1';
+                    }, 100);
+                    el.formSignUp.style.display = 'none';
+                    el.formSignIn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const email = el.formSignIn.elements.email_in.value;
+                        const password = el.formSignIn.elements.password_in.value;
+                        if (!validateCredentials(email, password)) {
+                            // 유효성 검사 실패 시 동작
+                            console.log('유효성 검사 실패');
+                            return;
+                        }
+                        // 유효성 검사 성공 시 동작
+                        console.log('유효성 검사 성공');
+                        // 추가 동작 수행 가능
+                        // 여기에 폼 제출 후 동작을 추가할 수 있습니다.
+                    });
+                }
+                el.pageHome.style.opacity = '0';
+                setTimeout(function () {
+                    el.pageHome.style.display = 'none';
+                }, 700);
+                function validateCredentials(email, password) {
+                    // JSON 파일에서 유저 정보 읽어오기
+                    const users = JSON.parse(fs.readFileSync(userFilePath, 'utf8'));
 
-        <!-- Overlay -->
-        <div class="container__overlay">
-            <div class="overlay">
-                <div class="overlay__panel overlay--left">
-                    <button class="btn" id="signIn">Sign In</button>
+                    // 이메일과 비밀번호 유효성 검사
+                    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // 이메일 형식 검사
+                    const isValidPassword = password.length >= 8; // 비밀번호 길이 검사
+
+                    if (!isValidEmail) {
+                        console.log('유효하지 않은 이메일 형식입니다.');
+                        return false;
+                    }
+
+                    if (!isValidPassword) {
+                        console.log('비밀번호는 최소 8자 이상이어야 합니다.');
+                        return false;
+                    }
+
+                    // JSON 파일에서 유저 정보와 일치하는지 검사
+                    const user = users.find(user => user.email === email && user.password === password);
+
+                    if (!user) {
+                        console.log('유효하지 않은 이메일 또는 비밀번호입니다.');
+                        return false;
+                    }
+
+                    return true; // 유효한 사용자인 경우 true 반환
+                }
+                setTimeout(function () {
+                    el.pageSignUp.style.display = 'flex';
+                    el.pageSignUp.style.opacity = '1';
+
+                    setTimeout(function () {
+                        el.sideSignLeft.style.padding = '20px';
+                        el.sideSignLeft.style.opacity = '1';
+                        el.sideSignRight.style.opacity = '1';
+                        el.sideSignRight.style.backgroundPositionX = '230%';
+                        el.formArea.style.opacity = '1';
+                    }, 10);
+                }, 900);
+            }
+
+        });
+        // Behavior of the inputs and labels
+        for (input of el.inputs) {
+            console.log(input)
+            input.addEventListener('keydown', function () {
+                this.labels[0].style.top = '10px';
+            });
+            input.addEventListener('blur', function () {
+                if (this.value === '') {
+                    this.labels[0].style.top = '25px';
+                }
+            })
+        }
+
+    </script>
+    <main class="main">
+        <section class="home">
+            <h1>Welcome to the <span>Hana Health Care</span></h1>
+            <button id="sign-up" class="btn">회원가입</button>
+            <button id="sign-in" class="btn">로그인</button>
+            <p><a class="link-copy" href="http://collectui.com/designers/dnes/sign-up" target="_blank">©Copyright
+                    2023</a></p>
+        </section>
+
+        <section class="sign-up">
+            <article class="signup-left">
+                <h1>Hana Health Care</h1>
+                <div class="wc_message">
+                    <h3>Be Healthy with Hana Health Care</h3>
+                    <p>It's Easy and takes less then before.</p>
                 </div>
-                <div class="overlay__panel overlay--right">
-                    <button class="btn" id="signUp">Sign Up</button>
+                <div class="btn-back">
+                    <i class="fas fa-2x fa-angle-left angle-left-color"></i>
+                    HOME
                 </div>
-            </div>
-        </div>
-    </div>
+            </article>
+
+            <article class="form-area">
+                <!-- Form area Sign Up -->
+                <div class="organize-form form-area-signup">
+                    <h2>SIGN UP</h2>
+                    <form class="form">
+                        <div class="form-field">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="text" id="email" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="password">Password</label>
+                            <input type="text" id="password" />
+                        </div>
+
+                        <button class="btn-sign btn-up">Sign Up</button>
+                    </form>
+                    <p>Have an account? <a href="#" class="link-in">Sign In</a></p>
+
+                </div>
+
+                <!-- Form area Sign In -->
+                <div class="organize-form form-area-signin">
+                    <h2>하나헬스케어</h2>
+                    <form class="form">
+                        <div class="form-field">
+                            <label for="email-in">Email</label>
+                            <input type="text" name="email_in" id="email-in" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="password-in">Password</label>
+                            <input type="text" name="password_in" id="password-in" />
+                        </div>
+
+                        <button class="btn-sign btn-in">Sign In</button>
+                    </form>
+                    <p>Haven't an account? <a href="#" class="link-up">Sign Up</a></p>
+                </div>
+            </article>
+
+            <article class="signup-right">
+                <i class="fas fa-2x fa-bars bars-style"></i>
+                <p><a class="link-copy" href="http://collectui.com/designers/dnes/sign-up" target="_blank">©Copyright
+                        2023</a></p>
+
+            </article>
+        </section>
+    </main>
 </body>
 
 </html>
