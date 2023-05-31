@@ -57,7 +57,7 @@
 .nav-link {
   color: black !important;
   /* 글씨색을 검정으로 변경 */
-  font-family: "HANA", sans-serif;
+  font-family: "Hana", sans-serif;
   /* 글씨체를 HANA로 변경 */
 }
 
@@ -107,7 +107,6 @@
 .container {
   max-width: 1200px;
   width: 80%;
-  
   padding : 0 25px;
 
 }
@@ -118,4 +117,32 @@
 
 .btn-resize:hover {
   font-size: 95%;
+}
+
+.mypage {
+  background: linear-gradient(135deg, #009490, #001e1f);
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+}
+
+#mypage {
+  font-family: "Hana", sans-serif;
+}
+
+#json-data-left,
+#json-data-right {
+  font-weight: 700;
+  font-size: 20px;
+  width: 49%;
+  height: 400px;
+  background-color: #FFF;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
 }

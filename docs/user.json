@@ -1,12 +1,10 @@
-{
-    "users": [
+[
     {
         "email": "test@naver.com",
-        "password": "naver"
+        "password": "naver123"
     },
     {
         "email": "test@google.com",
-        "password": "google"
+        "password": "google123"
     }
-    ]
-}
+]

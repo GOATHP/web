@@ -31,7 +31,6 @@
                 btnSignIn: document.querySelector('.btn-in'),
                 labels: document.getElementsByTagName('label'),
                 inputs: document.getElementsByTagName('input'),
-
             };
             // ADD Events
             // Show the page Sign Up
@@ -124,15 +123,12 @@
                         console.log('유효하지 않은 이메일 형식입니다.');
                         return false;
                     }
-
                     if (!isValidPassword) {
                         console.log('비밀번호는 최소 8자 이상이어야 합니다.');
                         return false;
                     }
-
                     // JSON 파일에서 유저 정보와 일치하는지 검사
                     const user = users.find(user => user.email === email && user.password === password);
-
                     if (!user) {
                         console.log('유효하지 않은 이메일 또는 비밀번호입니다.');
                         return false;
@@ -153,7 +149,6 @@
                     }, 10);
                 }, 900);
             }
-
         });
         // Behavior of the inputs and labels
         for (input of el.inputs) {

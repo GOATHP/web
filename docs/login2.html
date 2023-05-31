@@ -12,7 +12,46 @@
 <body>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Elements
+            // 인풋 라벨 핸들링
+            function handleInputLabel() {
+                const emailInput = document.getElementById('email-in');
+                const passwordInput = document.getElementById('password-in');
+                const emailLabel = document.querySelector('label[for="email-in"]');
+                const passwordLabel = document.querySelector('label[for="password-in"]');
+
+                emailInput.addEventListener('click', function () {
+                    emailLabel.textContent = '';
+                });
+
+                passwordInput.addEventListener('click', function () {
+                    passwordLabel.textContent = '';
+                });
+
+                emailInput.addEventListener('blur', function () {
+                    if (this.value === '') {
+                        emailLabel.textContent = 'Email';
+                    }
+                });
+
+                passwordInput.addEventListener('blur', function () {
+                    if (this.value === '') {
+                        passwordLabel.textContent = 'Password';
+                    }
+                });
+            }
+
+            handleInputLabel();
+
+            //패스워드 마스크씌우기
+            function maskPasswordInput() {
+                const passwordInput = document.getElementById('password-in');
+                passwordInput.addEventListener('input', function () {
+                    const maskedValue = '*'.repeat(this.value.length);
+                    this.value = maskedValue;
+                });
+            }
+            // maskPasswordInput 함수 호출
+            // maskPasswordInput();
             const el = {
                 signUpHome: document.getElementById('sign-up'),
                 signInHome: document.getElementById('sign-in'),
@@ -92,19 +131,22 @@
                         el.formSignIn.style.opacity = '1';
                     }, 100);
                     el.formSignUp.style.display = 'none';
-                    el.formSignIn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const email = el.formSignIn.elements.email_in.value;
-                        const password = el.formSignIn.elements.password_in.value;
-                        if (!validateCredentials(email, password)) {
-                            // 유효성 검사 실패 시 동작
-                            console.log('유효성 검사 실패');
-                            return;
-                        }
-                        // 유효성 검사 성공 시 동작
-                        console.log('유효성 검사 성공');
-                        // 추가 동작 수행 가능
-                        // 여기에 폼 제출 후 동작을 추가할 수 있습니다.
+                    el.formSignIn.addEventListener('submit', function (e) {
+                        e.preventDefault(); //쿼리셀렉터로 묶어야함
+                        const email = document.querySelector('input[name="email_in"]').value;
+                        const password = document.querySelector('input[name="password_in"]').value;
+                        validateCredentials(email, password)
+                            .then(() => {
+                                // 유효성 검사 성공 시 동작
+                                console.log('유효성 검사 성공');
+                                // 추가 동작 수행 가능
+                                // 여기에 폼 제출 후 동작을 추가할 수 있습니다.
+                                window.location.href = 'index_logout.html';
+                            })
+                            .catch(error => {
+                                // 유효성 검사 실패 시 동작
+                                console.log('유효성 검사 실패:', error.message);
+                            });
                     });
                 }
                 el.pageHome.style.opacity = '0';
@@ -112,34 +154,39 @@
                     el.pageHome.style.display = 'none';
                 }, 700);
                 function validateCredentials(email, password) {
-                    // JSON 파일에서 유저 정보 읽어오기
-                    const users = JSON.parse(fs.readFileSync(userFilePath, 'utf8'));
+                    return fetch('user.json')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('사용자 정보를 읽어오는데 실패하였습니다.');
+                            }
+                            return response.json();
+                        })
+                        .then(users => {
+                            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                            const isValidPassword = password.length >= 8;
 
-                    // 이메일과 비밀번호 유효성 검사
-                    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // 이메일 형식 검사
-                    const isValidPassword = password.length >= 8; // 비밀번호 길이 검사
+                            if (!isValidEmail) {
+                                return Promise.reject(new Error('유효하지 않은 이메일 형식입니다.'));
+                            }
+                            if (!isValidPassword) {
+                                return Promise.reject(new Error('비밀번호는 최소 8자 이상이어야 합니다.'));
+                            }
 
-                    if (!isValidEmail) {
-                        console.log('유효하지 않은 이메일 형식입니다.');
-                        return false;
-                    }
-                    if (!isValidPassword) {
-                        console.log('비밀번호는 최소 8자 이상이어야 합니다.');
-                        return false;
-                    }
-                    // JSON 파일에서 유저 정보와 일치하는지 검사
-                    const user = users.find(user => user.email === email && user.password === password);
-                    if (!user) {
-                        console.log('유효하지 않은 이메일 또는 비밀번호입니다.');
-                        return false;
-                    }
+                            const user = users.find(user => user.email === email && user.password === password);
+                            if (!user) {
+                                return Promise.reject(new Error('유효하지 않은 이메일 또는 비밀번호입니다.'));
+                            }
+                            return true;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            return Promise.reject(false);
+                        });
+                };
 
-                    return true; // 유효한 사용자인 경우 true 반환
-                }
                 setTimeout(function () {
                     el.pageSignUp.style.display = 'flex';
                     el.pageSignUp.style.opacity = '1';
-
                     setTimeout(function () {
                         el.sideSignLeft.style.padding = '20px';
                         el.sideSignLeft.style.opacity = '1';
@@ -151,16 +198,17 @@
             }
         });
         // Behavior of the inputs and labels
-        for (input of el.inputs) {
-            console.log(input)
+        for (let i = 0; i < el.inputs.length; i++) {
+            const input = el.inputs[i];
             input.addEventListener('keydown', function () {
                 this.labels[0].style.top = '10px';
             });
+
             input.addEventListener('blur', function () {
                 if (this.value === '') {
                     this.labels[0].style.top = '25px';
                 }
-            })
+            });
         }
 
     </script>
@@ -169,8 +217,7 @@
             <h1>Welcome to the <span>Hana Health Care</span></h1>
             <button id="sign-up" class="btn">회원가입</button>
             <button id="sign-in" class="btn">로그인</button>
-            <p><a class="link-copy" href="http://collectui.com/designers/dnes/sign-up" target="_blank">©Copyright
-                    2023</a></p>
+            <p><a class="link-copy" href="http://collectui.com/designers/dnes/sign-up" target="_blank">©2023</a></p>
         </section>
 
         <section class="sign-up">
@@ -178,7 +225,7 @@
                 <h1>Hana Health Care</h1>
                 <div class="wc_message">
                     <h3>Be Healthy with Hana Health Care</h3>
-                    <p>It's Easy and takes less then before.</p>
+                    <p>It's Easy and takes less than before.</p>
                 </div>
                 <div class="btn-back">
                     <i class="fas fa-2x fa-angle-left angle-left-color"></i>
@@ -234,8 +281,7 @@
 
             <article class="signup-right">
                 <i class="fas fa-2x fa-bars bars-style"></i>
-                <p><a class="link-copy" href="http://collectui.com/designers/dnes/sign-up" target="_blank">©Copyright
-                        2023</a></p>
+                <p><a class="link-copy" href="http://collectui.com/designers/dnes/sign-up" target="_blank">©2023</a></p>
 
             </article>
         </section>
