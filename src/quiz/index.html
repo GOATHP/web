@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            user-select: none;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .even-row {
+            background-color: #f2f2f2;
+        }
+
+        .selected-row {
+            background-color: #a6dcef;
+        }
+
+        .dragging {
+            opacity: 0.5;
+        }
+
+        .drag-over {
+            background-color: #f8e8a2;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="forumTable">
+        <tr>
+            <th>
+                <input type="checkbox" onchange="selectAllRows()">
+            </th>
+            <th>ID</th>
+            <th>Title</th>
+        </tr>
+    </table>
+    <div id="paginationButtons"></div>
+
+    <script>
+        const table = document.getElementById('forumTable');
+        const paginationButtons = document.getElementById('paginationButtons');
+        const entriesPerPage = 10;
+        let data = [];
+
+        let draggedRow = null;
+
+        fetch('forum.json')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not OK');
+                }
+                return response.json();
+            })
+            .then((jsonData) => {
+                data = jsonData;
+                renderTable(1);
+            })
+            .catch((error) => {
+                console.log('Error:', error);
+            });
+
+        function renderTable(page) {
+            const startIndex = (page - 1) * entriesPerPage;
+            const endIndex = startIndex + entriesPerPage;
+            const pageData = data.slice(startIndex, endIndex);
+
+            table.innerHTML = '';
+            paginationButtons.innerHTML = '';
+
+            const headerRow = document.createElement('tr');
+            const selectAllCheckboxHeader = document.createElement('th');
+            const selectAllCheckbox = document.createElement('input');
+            selectAllCheckbox.type = 'checkbox';
+            selectAllCheckbox.addEventListener('change', () => {
+                const checkboxes = table.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((checkbox, index) => {
+                    if (index > 0) {
+                        checkbox.checked = selectAllCheckbox.checked;
+                        const row = checkbox.parentNode.parentNode;
+                        if (selectAllCheckbox.checked) {
+                            row.classList.add('selected-row');
+                        } else {
+                            row.classList.remove('selected-row');
+                        }
+                    }
+                });
+            });
+            selectAllCheckboxHeader.appendChild(selectAllCheckbox);
+            headerRow.appendChild(selectAllCheckboxHeader);
+
+            const idHeader = document.createElement('th');
+            idHeader.textContent = 'ID';
+            headerRow.appendChild(idHeader);
+
+            const titleHeader = document.createElement('th');
+            titleHeader.textContent = 'Title';
+            headerRow.appendChild(titleHeader);
+
+            table.appendChild(headerRow);
+
+            pageData.forEach((entry, index) => {
+                const row = document.createElement('tr');
+
+                const selectCheckboxCell = document.createElement('td');
+                const selectCheckbox = document.createElement('input');
+                selectCheckbox.type = 'checkbox';
+                selectCheckbox.addEventListener('change', () => {
+                    if (selectCheckbox.checked) {
+                        row.classList.add('selected-row');
+                    } else {
+                        row.classList.remove('selected-row');
+                    }
+                });
+                selectCheckboxCell.appendChild(selectCheckbox);
+                row.appendChild(selectCheckboxCell);
+
+                const idCell = document.createElement('td');
+                idCell.textContent = entry.id;
+                row.appendChild(idCell);
+
+                const titleCell = document.createElement('td');
+                titleCell.textContent = entry.title;
+                row.appendChild(titleCell);
+
+                row.draggable = true;
+
+                row.addEventListener('dragstart', () => {
+                    draggedRow = row;
+                    row.classList.add('dragging');
+                });
+
+                row.addEventListener('dragend', () => {
+                    row.classList.remove('dragging');
+                    draggedRow = null;
+                });
+
+                row.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (draggedRow) {
+                        const bounding = row.getBoundingClientRect();
+                        const offset = bounding.y + (bounding.height / 2);
+                        if (e.clientY - offset > 0) {
+                            row.classList.add('drag-over');
+                        } else {
+                            row.classList.remove('drag-over');
+                        }
+                    }
+                });
+
+                row.addEventListener('dragleave', () => {
+                    row.classList.remove('drag-over');
+                });
+
+                row.addEventListener('drop', () => {
+                    if (draggedRow) {
+                        const fromIndex = Array.from(table.children).indexOf(draggedRow);
+                        const toIndex = Array.from(table.children).indexOf(row);
+                        if (fromIndex < toIndex) {
+                            table.insertBefore(draggedRow, row.nextSibling);
+                        } else {
+                            table.insertBefore(draggedRow, row);
+                        }
+                        row.classList.remove('drag-over');
+                        updateDataOrder(fromIndex, toIndex);
+                    }
+                });
+
+                table.appendChild(row);
+
+                if (index % 2 === 0) {
+                    row.classList.add('even-row');
+                }
+            });
+
+            const totalPages = Math.ceil(data.length / entriesPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', () => {
+                    renderTable(i);
+                });
+                paginationButtons.appendChild(button);
+            }
+        }
+
+        function updateDataOrder(fromIndex, toIndex) {
+            const startIndex = (fromIndex - 1) * entriesPerPage;
+            const endIndex = startIndex + entriesPerPage;
+            const pageData = data.slice(startIndex, endIndex);
+
+            const removed = pageData.splice(fromIndex - startIndex, 1)[0];
+            pageData.splice(toIndex - startIndex, 0, removed);
+
+            data.splice(startIndex, entriesPerPage, ...pageData);
+        }
+
+        function selectAllRows() {
+            const checkboxes = table.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach((checkbox, index) => {
+                if (index > 0) {
+                    checkbox.checked = checkboxes[0].checked;
+                    const row = checkbox.parentNode.parentNode;
+                    if (checkboxes[0].checked) {
+                        row.classList.add('selected-row');
+                    } else {
+                        row.classList.remove('selected-row');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

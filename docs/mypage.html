@@ -66,11 +66,10 @@
                         aria-selected="false" style="margin-right: 10px;">회원가입</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="pills-contact-tab" href="mypage.html" data-bs-toggle="pill"
-                        data-bs-target="#pills-contact" role="tab" aria-controls="pills-contact"
-                        aria-selected="false" style="margin-right: 10px;">마이페이지</a>
+                    <button class="nav-link" id="pills-contact-tab" href="../mypage.html" data-bs-toggle="pill"
+                        data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+                        aria-selected="false" style="margin-right: 10px;">마이페이지</button>
                 </li>
-                
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
                         data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
@@ -115,11 +114,8 @@
         }
     </style>
     <script>
-        // JSON 파일 경로
         var profileJsonFile = 'profile.json';
         var calJsonFile = 'cal.json';
-
-        // AJAX 요청으로 profile.json 파일 가져오기
         var profileRequest = new XMLHttpRequest();
         profileRequest.open('GET', profileJsonFile, true);
         profileRequest.onreadystatechange = function () {
@@ -129,8 +125,6 @@
             }
         };
         profileRequest.send();
-
-        // AJAX 요청으로 cal.json 파일 가져오기
         var calRequest = new XMLHttpRequest();
         calRequest.open('GET', calJsonFile, true);
         calRequest.onreadystatechange = function () {
@@ -140,8 +134,6 @@
             }
         };
         calRequest.send();
-
-        // profile.json 데이터를 표시하는 함수
         function displayProfileData(data) {
             var profileJsonDiv = document.getElementById('json-data-left');
             profileJsonDiv.innerHTML = `
@@ -154,8 +146,6 @@
             `;
             profileJsonDiv.classList.add('json-data');
         }
-
-        // cal.json 데이터를 표시하는 함수
         function displayCalData(data) {
             var calJsonDiv = document.getElementById('json-data-right');
             calJsonDiv.innerHTML = `
@@ -169,7 +159,6 @@
     <div class="mypage" id="mypage">
         <div id="json-data-left"></div>
         <div id="json-data-right"></div>
-
     </div>    
 </body>
 </html>
